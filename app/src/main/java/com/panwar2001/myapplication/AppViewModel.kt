@@ -1,5 +1,6 @@
 package com.panwar2001.myapplication
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,9 +22,12 @@ private const val STOP_TIMEOUT_MILLISECONDS: Long = 1_000
 
 
 @HiltViewModel
-class AppViewModel @Inject constructor(private val dataRepository: DataRepository): ViewModel(){
+class AppViewModel @Inject
+constructor(private val dataRepository: DataRepository,
+            private val networkObserver: NetworkObserver): ViewModel(){
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+    val networkStatus: LiveData<Boolean> = networkObserver
     val arrayList = dataRepository
         .arrayList
         .onEach {
@@ -34,6 +38,7 @@ class AppViewModel @Inject constructor(private val dataRepository: DataRepositor
             started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLISECONDS),
             initialValue = emptyList()
         )
+
     init {
         loadMetaData()
     }
