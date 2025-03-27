@@ -121,12 +121,18 @@ fun ImageListScreen(images: List<Pair<String,String>>,
                 gradient = Brush.horizontalGradient(colors = listOf(color1, color2))
             ) {
                 Row {
-                    Icon(
-                        imageVector = Icons.Default.Refresh,
-                        contentDescription = "Reload"
-                    )
+                    if(isRefreshing){
+                        CircularProgressIndicator(color=Color.White,
+                                                 modifier = Modifier.then(Modifier.size(16.dp)),
+                                                 strokeWidth = 2.dp)
+                    }else {
+                        Icon(
+                            imageVector = Icons.Default.Refresh,
+                            contentDescription = "Reload"
+                        )
+                    }
                     Spacer(Modifier.width(8.dp))
-                    Text(text = "Reload", color = Color.White)
+                    Text(text = "Reload", color = Color.White, fontSize = 16.sp)
                 }
             }
         }
@@ -188,7 +194,7 @@ fun PreviewListScreen(){
     var imgUrl by remember { mutableStateOf("https://photographylife.com/wp-content/uploads/2023/05/Nikon-Z8-Official-Samples-00001.jpg") }
     ImageListScreen(images = emptyList(),
                     imageUrl = imgUrl,
-                    isRefreshing = false,
+                    isRefreshing = true,
                     onRefresh = {},
                     isOffline = false,
                     onClick = { imgUrl = it })
