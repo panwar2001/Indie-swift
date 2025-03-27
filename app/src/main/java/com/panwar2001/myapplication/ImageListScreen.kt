@@ -1,9 +1,8 @@
 package com.panwar2001.myapplication
-
 import androidx.compose.animation.animateContentSize
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
@@ -27,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
@@ -43,14 +43,16 @@ import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import com.panwar2001.myapplication.ui.theme.color1
 import com.panwar2001.myapplication.ui.theme.color2
-import java.nio.file.WatchEvent
+import com.panwar2001.myapplication.ui.theme.errorColor
+import com.panwar2001.myapplication.ui.theme.greenLimeLight
+import kotlinx.coroutines.delay
 import androidx.compose.ui.unit.dp as dp1
 
 @Composable
 fun OfflineNetworkStatus(){
     Box(
         modifier = Modifier
-            .background(Color.Red)
+            .background(errorColor)
             .animateContentSize()
             .padding(20.dp)
             .fillMaxWidth()) {
@@ -62,11 +64,40 @@ fun OfflineNetworkStatus(){
                 tint = Color.White,
                 modifier = Modifier.size(20.dp))
             Spacer(Modifier.width(8.dp))
-            Text(text = "No Internet Connection!", color = Color.White)
+            Text(text = "No Internet Connection!", color = Color.White,
+                fontWeight = Bold)
         }
     }
 }
-
+@Composable
+fun OnlineNetworkStatus(){
+    var showOfflineStatus by remember { mutableStateOf(true) }
+    // Launch the effect to hide the status after 1 second
+    LaunchedEffect(Unit) {
+        delay(1000) // Delay for 1 second
+        showOfflineStatus = false
+    }
+    if(showOfflineStatus){
+    Box(
+        modifier = Modifier
+            .background(greenLimeLight)
+            .animateContentSize()
+            .padding(20.dp)
+            .fillMaxWidth()) {
+        Row(horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()){
+            Icon(painter = painterResource(R.drawable.internet_on),
+                contentDescription ="internet on",
+                tint = Color.White,
+                modifier = Modifier.size(20.dp))
+            Spacer(Modifier.width(8.dp))
+            Text(text = "Back Online!", color = Color.White,
+                fontWeight = Bold)
+        }
+    }
+    }
+}
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ImageListScreen(images: List<Pair<String,String>>,
@@ -77,11 +108,12 @@ fun ImageListScreen(images: List<Pair<String,String>>,
                     onClick: (String) -> Unit) {
     if(isOffline){
         OfflineNetworkStatus()
+    }else{
+        OnlineNetworkStatus()
     }
     if(images.isEmpty()) {
         Box(
-            modifier = Modifier
-                .fillMaxSize() // Fill the available space
+            modifier = Modifier.fillMaxSize() // Fill the available space
         ) {
             GradientButton(
                 onClick = onRefresh,
@@ -158,6 +190,6 @@ fun PreviewListScreen(){
                     imageUrl = imgUrl,
                     isRefreshing = false,
                     onRefresh = {},
-                    isOffline = true,
+                    isOffline = false,
                     onClick = { imgUrl = it })
 }

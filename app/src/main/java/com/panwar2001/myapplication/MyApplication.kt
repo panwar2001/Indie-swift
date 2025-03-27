@@ -1,4 +1,4 @@
-package com.plcoding.coilimagecachingguide
+package com.panwar2001.myapplication
 
 import android.app.Application
 import coil.ImageLoader

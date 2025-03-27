@@ -24,7 +24,7 @@ private const val STOP_TIMEOUT_MILLISECONDS: Long = 1_000
 @HiltViewModel
 class AppViewModel @Inject
 constructor(private val dataRepository: DataRepository,
-            private val networkObserver: NetworkObserver): ViewModel(){
+            networkObserver: NetworkObserver): ViewModel(){
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
     val networkStatus: LiveData<Boolean> = networkObserver
