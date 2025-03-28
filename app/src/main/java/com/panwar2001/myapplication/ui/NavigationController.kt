@@ -1,19 +1,22 @@
-package com.panwar2001.myapplication
+package com.panwar2001.myapplication.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.panwar2001.myapplication.AppViewModel
 
 
 /**
@@ -30,7 +33,7 @@ fun NavigationController(
         composable(route = Screens.Index1Screen.route) {
             val uiState by viewModel.uiState.collectAsState()
             val index1Data by viewModel.arrayList.collectAsState()
-            val isNetworkAvailable by viewModel.networkStatus.observeAsState(initial = false)
+            val isNetworkAvailable by viewModel.networkAvailable.observeAsState(initial = false)
             Scaffold { paddingValue ->
                 Column(modifier = Modifier.padding(paddingValue)) {
                     ImageListScreen(
@@ -47,8 +50,10 @@ fun NavigationController(
         composable(route = Screens.Index2Screen.route) {
             val uiState by viewModel.uiState.collectAsState()
             val index2Data by viewModel.arrayList.collectAsState()
-            val isNetworkAvailable by viewModel.networkStatus.observeAsState(initial = false)
-            Scaffold { paddingValue ->
+            val isNetworkAvailable by viewModel.networkAvailable.observeAsState(initial = false)
+            val snackBarHostState = remember { SnackbarHostState() }
+
+            Scaffold(snackbarHost = {snackBarHostState}) { paddingValue ->
                 Column(modifier = Modifier.padding(paddingValue)) {
                     ImageListScreen(
                         images = index2Data,

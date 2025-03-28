@@ -1,9 +1,7 @@
 package com.panwar2001.myapplication.di
 
-import androidx.lifecycle.LiveData
-import com.panwar2001.myapplication.DataRepoInterface
-import com.panwar2001.myapplication.DataRepository
-import com.panwar2001.myapplication.NetworkObserver
+import com.panwar2001.myapplication.core.DataRepoInterface
+import com.panwar2001.myapplication.core.DataRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -16,8 +14,4 @@ abstract  class  RepoModule {
     @Singleton
     @Binds
     abstract fun bindAppRepo(repository: DataRepository): DataRepoInterface
-
-    @Singleton
-    @Binds
-    abstract fun bindNetworkObserver(networkObserver: NetworkObserver): LiveData<Boolean>
 }

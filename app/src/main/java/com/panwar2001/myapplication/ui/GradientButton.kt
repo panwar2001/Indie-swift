@@ -1,4 +1,4 @@
-package com.panwar2001.myapplication
+package com.panwar2001.myapplication.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -36,3 +36,31 @@ fun GradientButton(
         }
     }
 }
+/*
+        Box(
+            modifier = Modifier.fillMaxSize() // Fill the available space
+        ) {
+            GradientButton(
+                onClick = onRefresh,
+                modifier = Modifier.align(Alignment.Center),
+                gradient = Brush.horizontalGradient(colors = listOf(color1, color2))
+            ) {
+                Row {
+                    if (isRefreshing) {
+                        CircularProgressIndicator(
+                            color = Color.White,
+                            modifier = Modifier.then(Modifier.size(16.dp)),
+                            strokeWidth = 2.dp
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Default.Refresh,
+                            contentDescription = "Reload"
+                        )
+                    }
+                    Spacer(Modifier.width(8.dp))
+                    Text(text = "Reload", color = Color.White, fontSize = 16.sp)
+                }
+            }
+        }
+ */

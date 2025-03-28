@@ -1,5 +1,6 @@
-package com.panwar2001.myapplication
+package com.panwar2001.myapplication.ui
 
+const val indieDataUrl1 ="https://panwar2001.github.io/indie-app-photos/indie-data-1.txt"
 
 val index_1: List<Pair<String, String>> = listOf(
     Pair("COM", "comp.jpg"),
