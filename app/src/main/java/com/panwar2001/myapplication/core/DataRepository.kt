@@ -51,7 +51,6 @@ class DataRepository @Inject constructor(private val appDao: AppDao): DataRepoIn
             }
         }catch (e: Exception){
             Log.e("error",e.message.toString())
-            _progress.value= emptyList()
         }
     }
     override suspend fun loadMetaDataFromDb(){

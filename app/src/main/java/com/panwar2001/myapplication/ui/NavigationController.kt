@@ -2,9 +2,12 @@ package com.panwar2001.myapplication.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -39,8 +42,6 @@ fun NavigationController(
                     ImageListScreen(
                         images = index1Data,
                         imageUrl = uiState.imgUrl,
-                        onRefresh = viewModel::loadMetaData,
-                        isRefreshing = uiState.loading,
                         isOffline = isNetworkAvailable,
                         onClick = viewModel::setCurrentImg
                     )
@@ -52,17 +53,19 @@ fun NavigationController(
             val index2Data by viewModel.arrayList.collectAsState()
             val isNetworkAvailable by viewModel.networkAvailable.observeAsState(initial = false)
             val snackBarHostState = remember { SnackbarHostState() }
-
-            Scaffold(snackbarHost = {snackBarHostState}) { paddingValue ->
-                Column(modifier = Modifier.padding(paddingValue)) {
-                    ImageListScreen(
-                        images = index2Data,
-                        imageUrl = uiState.imgUrl,
-                        onRefresh = viewModel::loadMetaData,
-                        isRefreshing = uiState.loading,
-                        isOffline = !isNetworkAvailable,
-                        onClick = viewModel::setCurrentImg
-                    )
+            val drawerState = rememberDrawerState(DrawerValue.Closed)
+            ModalNavigationDrawer(
+                drawerState = drawerState,
+                drawerContent = { NavigationDrawerContent(viewModel::loadMetaData, uiState.loading, isNetworkAvailable) }) {
+                Scaffold(snackbarHost = { snackBarHostState }) { paddingValue ->
+                    Column(modifier = Modifier.padding(paddingValue)) {
+                        ImageListScreen(
+                            images = index2Data,
+                            imageUrl = uiState.imgUrl,
+                            isOffline = !isNetworkAvailable,
+                            onClick = viewModel::setCurrentImg
+                        )
+                    }
                 }
             }
         }
